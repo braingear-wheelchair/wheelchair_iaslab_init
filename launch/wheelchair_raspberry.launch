@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<launch>
+	<arg name="machine-name" default='wheelchair-pi' />
+	<arg name="machine-ip"   default='192.168.1.200' />
+	<arg name="machine-user" default='wheelchair' />
+	<arg name="machine-script" default='/home/wheelchair/workspace/ros_remote_setup.sh' />
+
+	<arg name="controller_port" default='/dev/rnetchipset'/>
+	
+	<machine name="$(arg machine-name)" address="$(arg machine-ip)"  env-loader="$(arg machine-script)" user="$(arg machine-user)"/>
+
+	<!-- ros rnet controller -->
+	<node machine="$(arg machine-name)" name="controller" pkg="ros_rnet_controller" type="rnet_controller"> 
+  	  <param name="~port" 	  value="$(arg controller_port)"/>
+	</node>
+
+</launch>

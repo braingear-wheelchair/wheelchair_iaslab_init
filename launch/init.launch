@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<launch>
+    <include file="$(find wheelchair_iaslab_sensors)/launch/sensors_setup.launch"/> <!-- initialize the sensors -->
+    <include file="$(find wheelchair_iaslab_description)/launch/test_urdf_sensor.launch"/> <!-- initialize the TF (not sure) -->
+    
+    <!-- my imu 
+    <node pkg="mpu6050_serial_to_imu" type="mpu6050_serial_to_imu_node" name="mpu6050_serial_to_imu_node" respawn="true" output="screen">
+    	<param name="port" value="/dev/arduino_imu"/>
+    	<param name="tf_parent_frame_id" value="wcias_base_footprint" />
+    	<param name="tf_frame_id" value="wcias_imu_link" />
+    	<param name="frame_id" value="wcias_imu_link" />
+    </node> -->
+
+    <!-- <node pkg="ros_rnet_controller" type="rnet_controller" name="rnet_controller" />--> <!-- Controller normale -->
+    <!--to substitute with the one of the raspi --> 
+    <!-- <node pkg="ros_rnet_controller" type="rnet_controller" name="rnet_controller" /> -->
+    
+    <!-- <include file="$(find ros_rnet_node)/launch/serial_rnet.launch"/> --> <!-- Anita controller  -->
+    
+    
+    
+    <!-- <node pkg="wheelchair_iaslab_odometry" type="warp_position.py" name="warp_position" /> -->
+    <!--<include file="$(find wheelchair_iaslab_navigation)/launch/move_base_test.launch"/>--><!-- Initialize the local map -->
+    <!-- <include file="$(find wheelchair_iaslab_navigation)/launch/move_base.launch"/>  -->
+    <!--  --><include file="$(find wheelchair_iaslab_navigation)/launch/mpc.launch"/> 
+    
+    <!--<node pkg="test_tf" type="frame_tf2_broadcaster" name="frame_tf2_broadcaster" /> -->
+     <node pkg="wheelchair_iaslab_planer" type="wheelchair_iaslab_mpc.py" name="wheelchair_iaslab_mpc" output="screen"/> 
+    
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find wheelchair_iaslab_sensors)/rviz/c.rviz" required="true"/>
+</launch>
