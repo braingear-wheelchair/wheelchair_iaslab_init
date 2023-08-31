@@ -17,15 +17,9 @@
     
     <!-- <include file="$(find ros_rnet_node)/launch/serial_rnet.launch"/> --> <!-- Anita controller  -->
     
-    
-    
-    <!-- <node pkg="wheelchair_iaslab_odometry" type="warp_position.py" name="warp_position" /> -->
-    <!--<include file="$(find wheelchair_iaslab_navigation)/launch/move_base_test.launch"/>--><!-- Initialize the local map -->
-    <!-- <include file="$(find wheelchair_iaslab_navigation)/launch/move_base.launch"/>  -->
-    <!--  --><include file="$(find wheelchair_iaslab_navigation)/launch/mpc.launch"/> 
-    
-    <!--<node pkg="test_tf" type="frame_tf2_broadcaster" name="frame_tf2_broadcaster" /> -->
-     <node pkg="wheelchair_iaslab_planer" type="wheelchair_iaslab_mpc.py" name="wheelchair_iaslab_mpc" output="screen"/> 
-    
+    <include file="$(find wheelchair_iaslab_navigation)/launch/move_base.launch"/> 
+    <!-- <include file="$(find wheelchair_iaslab_navigation)/launch/mpc.launch"/> -->
+        
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(find wheelchair_iaslab_sensors)/rviz/c.rviz" required="true"/>
+    
 </launch>
