@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- Static tf for the fused laser" -->
+	<node pkg="tf" type="static_transform_publisher" name="fused_scan_broadcaster" args="0.33 0 0.66 0 0 0 1 wcias_base_footprint fused_scan 100" /> <!--same z of the two lidarss" -->
+	
+    <node pkg="ira_laser_tools" name="laserscan_multi_merger" type="laserscan_multi_merger" output="screen">
+	    <param name="destination_frame" value="fused_scan"/>
+	    <param name="cloud_destination_topic" value="/merged_cloud"/>
+	    <param name="scan_destination_topic" value="/fused_scan"/>
+	    <param name="laserscan_topics" value ="/scan_right /stereo_camera /lidar_camera" /> 
+	    <param name="angle_min" value="-2.09"/> <!-- value taken from listening topic -->
+	    <param name="angle_max" value="2.09"/> <!-- value taken from listening topic -->
+	    <param name="angle_increment" value="0.006135923322290182"/> <!-- value taken from listening topic -->
+	    <param name="scan_time" value="0.10000000149011612"/> <!-- value taken from listening topic -->
+	    <param name="range_min" value="0.019999999552965164"/> <!-- value taken from listening topic -->
+	    <param name="range_max" value="5.599999904632568"/> <!-- value taken from listening topic -->
+	</node>
+
+    <!-- generate the prox for the attractor -->
+    <node pkg="prox" type="converter.py" name="willy" output="screen">
+        <remap from="/attractors" to="proximity_grid/attractors" /> 
+        <param name="frame_id"   value="fused_scan"/>
+    </node>
+
+    <!-- Proximity Grid converters -->
+	<node pkg="proximity_grid" type="laserscan_to_proximitygrid" output="screen" name="laserscan_to_proximitygrid" >
+	    <param name="frame_id" 	  value="fused_scan"/>
+        <remap from="/hokuyo/scan" to="fused_scan" /> 
+	    <remap from="/proximity_grid" to="proximity_grid/repellors" /> 
+	</node>
+	 
+	
+	<!-- <node pkg="proximity_grid" type="point_to_proximitygrid" output="screen" name="point_to_proximitygrid" >
+	    <param name="frame_id" 	  value="fused_scan"/>
+	    <remap from="/proximity_grid" to="proximity_grid/attractors" /> 
+	</node> -->
+
+	<!-- Proximity Grid visualization -->
+	<node pkg="proximity_grid" type="proximitygrid_visualizer" output="screen" name="visualizer_repellors" > 
+		<remap from="/proximity_grid" to="proximity_grid/repellors" /> 
+		<remap from="/visualization" to="proximity_grid/repellors_visualization" />
+		<param name="frame_id" 	  value="fused_scan"/> 
+	</node>
+
+    
+	<node pkg="proximity_grid" type="proximitygrid_visualizer" output="screen" name="visualizer_attractors" > 
+		<remap from="/proximity_grid" to="proximity_grid/attractors" />
+		<remap from="/visualization" to="proximity_grid/attractors_visualization" />
+		<param name="frame_id" 	  value="fused_scan"/>
+	</node>
+	
+	
+	<arg name="enable_autostart"	default="True" />
+	<arg name="enable_repellors"	default="True" />
+	<arg name="enable_attractors"	default="True" />
+	
+	<!-- Shared dynamics -->	
+	<node pkg="shared_navigation" type="navigation" output="screen" name="navigation" >
+	    <rosparam param="enable_autostart" subst_value="True">$(arg enable_autostart)</rosparam>
+	    <rosparam param="enable_repellors" subst_value="True">$(arg enable_repellors)</rosparam>
+	    <rosparam param="enable_attractors" subst_value="False">$(arg enable_attractors)</rosparam>
+	    <param name="base_frame" 	  value="wcias_base_link"/>
+
+        <!-- param name="update_rate" value="50" /-->
+
+	    <param name="angular_velocity_min" 	  value="0.06"/> 
+	    <param name="angular_velocity_max" 	  value="0.26"/> 
+	    <param name="linear_velocity_min" 	  value="0.0"/> 
+	    <param name="linear_velocity_max" 	  value="0.26"/> 
+	    <param name="safe_distance_front" 	  value="0.4"/> 
+	    <param name="safe_distance_lateral"   value="0.05"/> 
+	    <param name="angular_repellors_strength" 	  value="0.15"/> 
+	    <param name="angular_repellors_decay" 	  value="0.15"/> 
+	    <param name="angular_attractors_strength" 	  value="0.15"/> 
+	    <param name="linear_velocity_decay" 	  value="0.97"/> 
+	    <param name="target_duration" 	  value="5.0"/> 
+	    <param name="size" 	  value="0.85"/>
+	</node>
+
+</launch>
