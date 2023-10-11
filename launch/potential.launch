@@ -16,11 +16,20 @@
 	    <param name="range_max" value="5.599999904632568"/> <!-- value taken from listening topic -->
 	</node>
 
-    <!-- generate the prox for the attractor -->
+	<!-- TODO: add the assistance of the prox -->
+
+    <!-- generate the prox for the attractor
     <node pkg="prox" type="converter.py" name="willy" output="screen">
         <remap from="/attractors" to="proximity_grid/attractors" /> 
         <param name="frame_id"   value="fused_scan"/>
     </node>
+    <node pkg="prox" type="confidence_control_node" name="peyote" output="screen">
+		<param name="short_distance" value="0.1"/>
+		<param name="long_distance"  value="0.4"/>
+
+		<param name="odom" value="/odometry/filterd"/>
+		<param name="goal" value="/move_base/goal"/>
+	</node> -->
 
     <!-- Proximity Grid converters -->
 	<node pkg="proximity_grid" type="laserscan_to_proximitygrid" output="screen" name="laserscan_to_proximitygrid" >
@@ -69,7 +78,7 @@
 	    <param name="linear_velocity_max" 	  value="0.26"/> 
 	    <param name="safe_distance_front" 	  value="0.4"/> 
 	    <param name="safe_distance_lateral"   value="0.05"/> 
-	    <param name="angular_repellors_strength" 	  value="0.15"/> 
+	    <param name="angular_repellors_strength" 	  value="2.5"/> 
 	    <param name="angular_repellors_decay" 	  value="0.15"/> 
 	    <param name="angular_attractors_strength" 	  value="0.15"/> 
 	    <param name="linear_velocity_decay" 	  value="0.97"/> 
