@@ -16,20 +16,10 @@
 	    <param name="range_max" value="5.599999904632568"/> <!-- value taken from listening topic -->
 	</node>
 
-	<!-- TODO: add the assistance of the prox -->
-
-    <!-- generate the prox for the attractor
-    <node pkg="prox" type="converter.py" name="willy" output="screen">
-        <remap from="/attractors" to="proximity_grid/attractors" /> 
-        <param name="frame_id"   value="fused_scan"/>
-    </node>
-    <node pkg="prox" type="confidence_control_node" name="peyote" output="screen">
-		<param name="short_distance" value="0.1"/>
-		<param name="long_distance"  value="0.4"/>
-
-		<param name="odom" value="/odometry/filterd"/>
-		<param name="goal" value="/move_base/goal"/>
-	</node> -->
+  <!-- generate the pipeline for places the attractors -->
+  <include file="$(find prox)/launch/assistence.launch">
+    <remap from="/attractors" to="proximity_grid/attractors" /> 
+  </include>
 
     <!-- Proximity Grid converters -->
 	<node pkg="proximity_grid" type="laserscan_to_proximitygrid" output="screen" name="laserscan_to_proximitygrid" >
@@ -39,11 +29,6 @@
 	</node>
 	 
 	
-	<!-- <node pkg="proximity_grid" type="point_to_proximitygrid" output="screen" name="point_to_proximitygrid" >
-	    <param name="frame_id" 	  value="fused_scan"/>
-	    <remap from="/proximity_grid" to="proximity_grid/attractors" /> 
-	</node> -->
-
 	<!-- Proximity Grid visualization -->
 	<node pkg="proximity_grid" type="proximitygrid_visualizer" output="screen" name="visualizer_repellors" > 
 		<remap from="/proximity_grid" to="proximity_grid/repellors" /> 
@@ -70,7 +55,7 @@
 	    <rosparam param="enable_attractors" subst_value="False">$(arg enable_attractors)</rosparam>
 	    <param name="base_frame" 	  value="wcias_base_link"/>
 
-        <!-- param name="update_rate" value="50" /-->
+      <param name="update_rate" value="50" />
 
 	    <param name="angular_velocity_min" 	  value="0.06"/> 
 	    <param name="angular_velocity_max" 	  value="0.26"/> 
