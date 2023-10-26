@@ -1,4 +1,4 @@
-
+<?xml version="1.0"?>
 <launch>
   <node pkg="rosbag" type="record" args="-o /home/$(env USER)/data_planner /cmd_vel /odom /odometry/filtered" name="record" output="screen"/>
 </launch>
