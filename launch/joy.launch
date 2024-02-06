@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+    <node name="joyconnetion" pkg="joy" type="joy_node" />
+    <node name="joyconverter" pkg="wheelchair_iaslab_control" type="continuos_controller.py">
+        <param name="coeff_vel_straight" value="0.5" />
+        <param name="coeff_vel_turn"     value="0.5" />
+        <param name="mode"               value="0"   /> <!-- 0 - direct control, 1 - proximity grid-->
+    </node>
+</launch>

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <launch>
-    <include file="$(find wheelchair_iaslab_sensors)/launch/sensors_setup.launch"/> <!-- initialize the sensors -->
+    <include file="$(find wheelchair_iaslab_sensors)/launch/sensors_setup.launch"/>        <!-- initialize the sensors -->
     <include file="$(find wheelchair_iaslab_description)/launch/test_urdf_sensor.launch"/> <!-- initialize the TF (not sure) -->
     
     <include file="$(find wheelchair_iaslab_odometry)/launch/odometry.launch"/>
@@ -11,7 +11,6 @@
     
     <!-- <include file="$(find ros_rnet_node)/launch/serial_rnet.launch"/> --> <!-- Anita controller  -->
     
-    <include file="$(find wheelchair_iaslab_navigation)/launch/move_base.launch"/> 
     <!-- <include file="$(find wheelchair_iaslab_navigation)/launch/mpc.launch"/> -->
     <include file="$(find wheelchair_iaslab_init)/launch/potential.launch"/>
 
