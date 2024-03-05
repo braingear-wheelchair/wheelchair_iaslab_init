@@ -1,80 +1,88 @@
 <?xml version="1.0"?>
 <launch>
-    <include file="$(find wheelchair_iaslab_navigation)/launch/move_base.launch"/>
+    <include file="$(find wheelchair_iaslab_navigation)/launch/proximity.launch"/>
 
-    <!-- Static tf for the fused laser" -->
-	<node pkg="tf" type="static_transform_publisher" name="fused_scan_broadcaster" args="0.33 0 0.66 0 0 0 1 wcias_base_footprint fused_scan 100" /> <!--same z of the two lidarss" -->
-	
-    <node pkg="ira_laser_tools" name="laserscan_multi_merger" type="laserscan_multi_merger" output="screen">
-	    <param name="destination_frame" value="fused_scan"/>
-	    <param name="cloud_destination_topic" value="/merged_cloud"/>
-	    <param name="scan_destination_topic" value="/fused_scan"/>
-	    <param name="laserscan_topics" value ="/scan_right" /> <!-- /lidar_camera /stereo_camera--> 
-	    <param name="angle_min" value="-2.09"/> <!-- value taken from listening topic -->
-	    <param name="angle_max" value="2.09"/> <!-- value taken from listening topic -->
-	    <param name="angle_increment" value="0.006135923322290182"/> <!-- value taken from listening topic -->
-	    <param name="scan_time" value="0.10000000149011612"/> <!-- value taken from listening topic -->
-	    <param name="range_min" value="0.019999999552965164"/> <!-- value taken from listening topic -->
-	    <param name="range_max" value="5.599999904632568"/> <!-- value taken from listening topic -->
-	</node>
-
-  <!-- generate the pipeline for places the attractors -->
-  <include file="$(find prox)/launch/assistence.launch">
-    <remap from="/attractors" to="proximity_grid/attractors" /> 
-  </include> 
-
-    <!-- Proximity Grid converters -->
-	<node pkg="proximity_grid" type="laserscan_to_proximitygrid" output="screen" name="laserscan_to_proximitygrid" >
-	    <param name="frame_id" 	  value="fused_scan"/>
-        <remap from="/hokuyo/scan" to="fused_scan" /> 
-	    <remap from="/proximity_grid" to="proximity_grid/repellors" /> 
-	</node>
-	 
-	
-	<!-- Proximity Grid visualization -->
-	<node pkg="proximity_grid" type="proximitygrid_visualizer" output="screen" name="visualizer_repellors" > 
-		<remap from="/proximity_grid" to="proximity_grid/repellors" /> 
-		<remap from="/visualization" to="proximity_grid/repellors_visualization" />
-		<param name="frame_id" 	  value="fused_scan"/> 
-	</node>
-
+    <!-- REMOVED IN ORDER TO TEST THE PROXIMITI LOCAL NAVIGATION 
+    <?ignore Static tf for the fused laser ?>
+    <node pkg="tf" type="static_transform_publisher" name="fused_scan_broadcaster" args="0.33 0 0.66 0 0 0 1 wcias_base_footprint fused_scan 100" /> <?ignore  same z of the two lidarss ?>
     
-	<node pkg="proximity_grid" type="proximitygrid_visualizer" output="screen" name="visualizer_attractors" > 
-		<remap from="/proximity_grid" to="proximity_grid/attractors" />
-		<remap from="/visualization" to="proximity_grid/attractors_visualization" />
-		<param name="frame_id" 	  value="fused_scan"/>
-	</node>
+    <node pkg="ira_laser_tools" name="laserscan_multi_merger" type="laserscan_multi_merger" output="screen">
+        <param name="destination_frame" value="fused_scan"/>
+        <param name="cloud_destination_topic" value="/merged_cloud"/>
+        <param name="scan_destination_topic" value="/fused_scan"/>
+        <param name="laserscan_topics" value ="/scan_right /scan_left" /> <?ignore  /lidar_camera /stereo_camera      ?> 
+        <param name="angle_min" value="-2.09"/>                           <?ignore  value taken from listening topic  ?>
+        <param name="angle_max" value="2.09"/>                            <?ignore  value taken from listening topic  ?>
+        <param name="angle_increment" value="0.006135923322290182"/>      <?ignore  value taken from listening topic  ?>
+        <param name="scan_time" value="0.10000000149011612"/>             <?ignore  value taken from listening topic  ?>
+        <param name="range_min" value="0.019999999552965164"/>            <?ignore  value taken from listening topic  ?>
+        <param name="range_max" value="5.599999904632568"/>               <?ignore  value taken from listening topic  ?>
+    </node>
+
+    <?ignore Proximity Grid converters ?>
+    <node pkg="proximity_grid" type="laserscan_to_proximitygrid" output="screen" name="laserscan_to_proximitygrid" >
+        <param name="frame_id" 	  value="fused_scan"/>
+        <remap from="/hokuyo/scan" to="fused_scan" /> 
+        <remap from="/proximity_grid" to="proximity_grid/repellors" /> 
+    </node>
+    -->
+
+    <!-- generate the pipeline for places the attractors 
+    <include file="$(find wheelchair_iaslab_target_generator)/launch/assistence.launch">
+        <remap from="/attractors" to="proximity_grid/attractors" /> 
+    </include> -->
+
+    <include file="$(find wheelchair_iaslab_init)/launch/joy.launch"/>
+
+
+    <!-- Proximity Grid visualization -->
+    <node pkg="proximity_grid" type="proximitygrid_visualizer" output="screen" name="visualizer_repellors" > 
+        <remap from="/proximity_grid" to="/move_base/ProximityPlanner/repellors" /> 
+        <remap from="/visualization" to="proximity_grid/repellors_visualization" />
+        <param name="frame_id" 	  value="wcias_base_link"/> 
+        <param name="radius" value='1.0' />
+    </node>
+
+    <node pkg="proximity_grid" type="proximitygrid_visualizer" output="screen" name="visualizer_attractors" > 
+        <remap from="/proximity_grid" to="proximity_grid/attractors" />
+        <remap from="/visualization" to="proximity_grid/attractors_visualization" />
+        <param name="frame_id" 	  value="wcias_base_link"/>
+        <param name="radius" value='1.2' />
+    </node>
 	
 	
-	<arg name="enable_autostart"	default="True" />
-	<arg name="enable_repellors"	default="True" />
-	<arg name="enable_attractors"	default="True" />
+    <arg name="enable_autostart"	default="True" />
+    <arg name="enable_repellors"	default="True" />
+    <arg name="enable_attractors"	default="True" />
 	
-	<!-- Shared dynamics -->	
-	<node pkg="shared_navigation" type="navigation" output="screen" name="navigation" >
-	    <rosparam param="enable_autostart" subst_value="True">$(arg enable_autostart)</rosparam>
-	    <rosparam param="enable_repellors" subst_value="True">$(arg enable_repellors)</rosparam>
-	    <rosparam param="enable_attractors" subst_value="False">$(arg enable_attractors)</rosparam>
-	    <param name="base_frame" 	  value="wcias_base_link"/>
+    <!-- Shared dynamics -->	
+    <node pkg="shared_navigation" type="navigation" output="screen" name="navigation" >
+        <rosparam param="enable_autostart" subst_value="True">$(arg enable_autostart)</rosparam>
+        <rosparam param="enable_repellors" subst_value="True">$(arg enable_repellors)</rosparam>
+        <rosparam param="enable_attractors" subst_value="False">$(arg enable_attractors)</rosparam>
+        <param name="base_frame" 	  value="wcias_base_link"/>
 
-     	<param name="update_rate" value="50" />
+        <remap from="/proximity_grid/repellors" to="/move_base/ProximityPlanner/repellors" />
 
-	    <param name="angular_velocity_min" 	  value="0.06"/> 
-	    <param name="angular_velocity_max" 	  value="0.26"/> 
-	    <param name="linear_velocity_min" 	  value="0.0"/> 
-	    <param name="linear_velocity_max" 	  value="0.26"/> 
-	    <param name="safe_distance_front" 	  value="0.4"/> 
-	    <param name="safe_distance_lateral"   value="0.05"/> 
-	    <param name="angular_repellors_strength" 	  value="2.5"/> 
-	    <param name="angular_repellors_decay" 	  value="0.15"/> 
-	    <param name="angular_attractors_strength" 	  value="0.15"/> 
-	    <param name="linear_velocity_decay" 	  value="0.97"/> 
-	    <param name="target_duration" 	  value="5.0"/> 
-	    <param name="size" 	  value="0.85"/>
 
-		<remap from="/cmd_vel" to="/cmd_vel_tmp" /> <!-- only to compensate the moltiplication by one done in the controller (TODO: better fix this)-->
-	</node>
+        <param name="update_rate" value="50" />
 
-	<node pkg="wheelchair_iaslab_init" type="angularcompensation.py" name="compensation" />
+        <param name="angular_velocity_min"          value="0.0"/> 
+        <param name="angular_velocity_max"          value="0.4"/> 
+        <param name="linear_velocity_min"           value="0.0"/> 
+        <param name="linear_velocity_max"           value="0.13"/> 
+        <param name="safe_distance_front"           value="0.8"/> 
+        <param name="safe_distance_lateral"         value="0.05"/> 
+        <param name="angular_repellors_strength" 	value="2.5"/> 
+        <param name="angular_repellors_decay" 	    value="0.15"/> 
+        <param name="angular_attractors_strength" 	value="0.15"/> 
+        <param name="linear_velocity_decay" 	    value="0.97"/> 
+        <param name="target_duration" 	            value="5.0"/> 
+        <param name="size" 	                        value="0.85"/>
+
+        <!-- remap from="/cmd_vel" to="/cmd_vel_tmp" / --> <!-- only to compensate the moltiplication by one done in the controller (TODO: better fix this)-->
+    </node>
+
+          <!-- <node pkg="wheelchair_iaslab_init" type="angularcompensation.py" name="compensation" /> -->
 
 </launch>
