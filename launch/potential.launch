@@ -49,12 +49,11 @@
         <param name="frame_id" 	  value="wcias_base_link"/>
         <param name="radius" value='1.2' />
     </node>
-	
-	
+
     <arg name="enable_autostart"	default="True" />
     <arg name="enable_repellors"	default="True" />
     <arg name="enable_attractors"	default="True" />
-	
+
     <!-- Shared dynamics -->	
     <node pkg="shared_navigation" type="navigation" output="screen" name="navigation" >
         <rosparam param="enable_autostart" subst_value="True">$(arg enable_autostart)</rosparam>
@@ -67,18 +66,18 @@
 
         <param name="update_rate" value="50" />
 
-        <param name="angular_velocity_min"          value="0.0"/> 
-        <param name="angular_velocity_max"          value="0.4"/> 
-        <param name="linear_velocity_min"           value="0.0"/> 
-        <param name="linear_velocity_max"           value="0.13"/> 
-        <param name="safe_distance_front"           value="0.8"/> 
-        <param name="safe_distance_lateral"         value="0.05"/> 
-        <param name="angular_repellors_strength" 	value="2.5"/> 
-        <param name="angular_repellors_decay" 	    value="0.15"/> 
-        <param name="angular_attractors_strength" 	value="0.15"/> 
-        <param name="linear_velocity_decay" 	    value="0.97"/> 
-        <param name="target_duration" 	            value="5.0"/> 
-        <param name="size" 	                        value="0.85"/>
+        <param name="angular_velocity_min"          value="0.0"/>
+        <param name="angular_velocity_max"          value="0.12"/>
+        <param name="linear_velocity_min"           value="-0.012"/>
+        <param name="linear_velocity_max"           value="0.3"/>
+        <param name="safe_distance_front"           value="0.8"/>
+        <param name="safe_distance_lateral"         value="0.05"/>
+        <param name="angular_repellors_strength"    value="2.5"/>
+        <param name="angular_repellors_decay"       value="0.15"/>
+        <param name="angular_attractors_strength"   value="0.15"/>
+        <param name="linear_velocity_decay"         value="0.97"/>
+        <param name="target_duration"               value="5.0"/>
+        <param name="size"                          value="1.75"/> <?ignore test try the diagonal instead of 0.85  ?>
 
         <!-- remap from="/cmd_vel" to="/cmd_vel_tmp" / --> <!-- only to compensate the moltiplication by one done in the controller (TODO: better fix this)-->
     </node>
