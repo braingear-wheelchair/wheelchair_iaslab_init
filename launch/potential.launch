@@ -36,6 +36,7 @@
 
 
     <!-- Proximity Grid visualization -->
+    <!--  THhis now is going to be in the proximity_planner local planner
     <node pkg="proximity_grid" type="proximitygrid_visualizer" output="screen" name="visualizer_repellors" > 
         <remap from="/proximity_grid" to="/move_base/ProximityPlanner/repellors" /> 
         <remap from="/visualization" to="proximity_grid/repellors_visualization" />
@@ -53,9 +54,8 @@
     <arg name="enable_autostart"	default="True" />
     <arg name="enable_repellors"	default="True" />
     <arg name="enable_attractors"	default="True" /> <?ignore FOR NOW TEST WITHOUT ATTRACTOR ?>
-    <arg name="safe_distance" value="0.3" />
+    <arg name="safe_distance" value="0.5" />
 
-    <!-- Shared dynamics -->	
     <node pkg="shared_navigation" type="navigation" output="screen" name="navigation" >
         <rosparam param="enable_autostart" subst_value="True">$(arg enable_autostart)</rosparam>
         <rosparam param="enable_repellors" subst_value="True">$(arg enable_repellors)</rosparam>
@@ -64,25 +64,20 @@
 
         <remap from="/proximity_grid/repellors" to="/move_base/ProximityPlanner/repellors" />
 
-
         <param name="update_rate" value="50" />
 
-        <param name="angular_velocity_min"          value="0.0"/>
-        <param name="angular_velocity_max"          value="0.15"/>
-        <param name="linear_velocity_min"           value="0.04"/>
+        <param name="angular_velocity_min"          value="0.04"/>
+        <param name="angular_velocity_max"          value="0.14"/>
+        <param name="linear_velocity_min"           value="0.06"/>
         <param name="linear_velocity_max"           value="0.14"/>
         <param name="safe_distance_front"           value="$(arg safe_distance)"/>
         <param name="safe_distance_lateral"         value="$(arg safe_distance)"/>
-        <param name="angular_repellors_strength"    value="3.5"/>
-        <param name="angular_repellors_decay"       value="1.35"/>
-        <param name="angular_attractors_strength"   value="1.0"/> <?ignore test no more used TODO: remove it ?>
-        <param name="linear_velocity_decay"         value="0.97"/>
-        <param name="target_duration"               value="5.0"/>
+        <param name="angular_repellors_strength"    value="0.6"/>
+        <param name="angular_repellors_decay"       value="0.9"/>
         <param name="size"                          value="1.75"/> <?ignore test try the diagonal instead of 0.85  ?>
 
-        <!-- remap from="/cmd_vel" to="/cmd_vel_tmp" / --> <!-- only to compensate the moltiplication by one done in the controller (TODO: better fix this)-->
-    </node>
+      </node> -->
 
-          <!-- <node pkg="wheelchair_iaslab_init" type="angularcompensation.py" name="compensation" /> -->
+    <!-- <node pkg="wheelchair_iaslab_init" type="angularcompensation.py" name="compensation" /> -->
 
 </launch>
