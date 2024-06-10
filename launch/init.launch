@@ -3,10 +3,12 @@
     <include file="$(find wheelchair_iaslab_sensors)/launch/sensors_setup.launch"/>        <!-- initialize the sensors -->
     <include file="$(find wheelchair_iaslab_description)/launch/urdf_sensor.launch"/>      <!-- initialize the urdf    -->
     <include file="$(find wheelchair_iaslab_odometry)/launch/odometry.launch"/>            <!-- odometry               -->
-    <include file="$(find ros_rnet_node)/launch/serial_rnet.launch"/>                      <!-- Anita controller       -->
+    <!-- <include file="$(find ros_rnet_node)/launch/serial_rnet.launch"/> -->             <!-- Anita controller       -->
     
     <!-- <include file="$(find wheelchair_iaslab_navigation)/launch/mpc.launch"/> -->
     <include file="$(find wheelchair_iaslab_init)/launch/potential.launch"/>
+    
+    <include file="$(find wheelchair_iaslab_control)/launch/control.launch"/>
 
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(find wheelchair_iaslab_sensors)/rviz/c.rviz" required="true"/>
     
