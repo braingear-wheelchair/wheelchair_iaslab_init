@@ -7,8 +7,14 @@
     
     <!-- <include file="$(find wheelchair_iaslab_navigation)/launch/mpc.launch"/> -->
     <include file="$(find wheelchair_iaslab_init)/launch/potential.launch"/>
-    
+
+    <node name="rameez_vision" pkg="wheelchair_iaslab_init" type="launch_visoin.py" />     <!-- Start the rameez pipeline -->   
+    <include file="$(find camera)/launch/apriltag.launch"/>                                <!-- Detect the apriltag       -->
+
     <include file="$(find wheelchair_iaslab_control)/launch/control.launch"/>
+
+    <!-- Record the interested data -->
+    <include file="$(find wheelchair_iaslab_init)/launch/recored.launch"/> 
 
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(find wheelchair_iaslab_sensors)/rviz/c.rviz" required="true"/>
     
