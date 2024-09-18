@@ -3,8 +3,35 @@
   <!-- <node pkg="rosbag" type="record" args="-o /home/$(env USER)/data_planner /cmd_vel /odom /odometry/filtered" name="record" output="screen"/> -->
   <!-- <node pkg="rosbag" type="record" args="-o /home/$(env USER)/camera_cal /cmd_vel /odom /odometry/filtered /tf /tf_static  " name="record" output="screen"/>
   -->
-  <node pkg="rosbag" type="record" args="-o /home/$(env USER)/yolo/yolo 
+
+  <arg name="subject" value="s11" />
+  <!-- s1:alessio (problemi nel plot s1/s1_t1_yolo_2024-07-16-14-28-37 e s1/s1_t2_yolo_2024-07-16-16-17-00)
+       s2:anna 
+       s3:luca
+       s4:paolo
+       s5:tommaso (da rifare s5_t2_baseline_2024-07-24-17-27-54, s5_t1_baseline_2024-07-24-15-19-20.bag, s5_t2_yolo_2024-07-24-17-34-01.bag)
+       s6:francesco
+       s7:gabriele
+       s8:laura b.
+       s9:matteo
+       s10:federica
+       s11:riccardo da finire + paolo t2t3-->
+  <arg name="type"    value="baseline" />
+  <!-- yolo noyolo baseline -->
+  <arg name="task"    value="t3" /> 
+  <!-- t1 tavolo1, t2 tavolo2, t3 persona -->
+
+  
+  <!-- <node pkg="rosbag" type="record" args="-o /home/$(env USER)/data/Research/2024_wheelchair_icra/$(arg subject)/$(arg subject)_$(arg task)_$(arg type)
     /joy /cmd_vel /wcias_controller/odom /odometry/filtered /tag_detections /yolo/dgb_bb_markers
     /tf /tf_static /yolo_detected_objects_destination /move_base/current_goal  /rtabmap/odom
-    /yolo_detected_objects_marker_array" name="record" output="screen"/>
+    /yolo_detected_objects_marker_array /scan_left /scan_rigth
+    /camera_top/color/camera_info
+    /camera_top/color/image_raw" name="record" output="screen"/> -->
+
+    <!-- 
+    /opt_01/camera/camera/aligned_depth_to_color/camera_info
+    /opt_01/camera/camera/aligned_depth_to_color/image_raw
+    /opt_01/camera/camera/color/camera_info
+    /opt_01/camera/camera/color/image_raw-->
 </launch>
